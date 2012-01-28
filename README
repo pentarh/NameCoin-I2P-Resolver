@@ -1,0 +1,180 @@
+This code is an example how to resolve anonymouse authoritative Namecoin .bit domains into an anonymous I2P network destination addresses.
+
+Author:		Pentarh Udi <pentarh@gmail.com>
+URL:		http://i2psupport.org/
+
+NOTE: This is not the end way of NameCoin integration, but a kickstart
+NOTE: This is the proof-of-concept way to get fully anonimized internet services work with authoritative user-friendly name resolution
+NOTE: It is still complex to set it up and beta version a lot of work is in a track
+
+1. Background
+
+Build instructions are in the bottom of this document
+
+1.1 NameCoin
+
+Namecoin is a distributed naming system based on bitcoin technology (a cryptocurrency).
+It can be used to store any data that use a name (or a key) associated with a value like domain names (DNS), 
+user identities, hash of documents to prove date of creation, etc:
+
+[Name] => [Value]
+domain_name => domain_zone_configuration
+user_name => user_public_identity (email, name, gpg key, etc)
+document_hash => document_infos (name, hash, owner, etc)
+
+To register a name, you must own some namecoins (NMC, the internal cryptocurrency used by the software).
+
+1.2 I2P
+
+I2P is an anonymizing network, offering a simple layer that identity-sensitive 
+applications can use to securely communicate. All data is wrapped with several 
+layers of encryption, and the network is both distributed and dynamic, with no
+trusted parties.
+
+Many applications are available that interface with I2P, including mail, peer-peer, IRC chat, and others.
+
+2. The Problem
+
+NameCoin was designed as decentralized authoritative name resolution network with all features of record
+digital signatures. So the NameCoin domains are authoritative and only owner can change his domain attributes.
+NameCoin has no any central authority and works on P2P basis, being anonymous authoritative P2P domain provider. 
+Owning NameCoin domain will not disclose any your private data to public if you do not want it.
+
+NameCoin domains can be resolved into IP addresses, Tor addresses and I2P destinations.
+
+When you configure your domain to resolve to regular IP4/IP6 addresses or delegate it to
+a regular nameservers, you can expirence privacy data leak. Your server is not anonymous
+in this case and can be shut down with 3rd party companies.
+
+So there is no sense in anonimous domain when you use public IP protocol which is not anonimous 
+by default.
+
+Problem 1: NameCoin needs an anonymous P2P Network
+
+I2P provides an Internet overlay anonymous network, where destination address is a hash with no 
+correspondence with any IP addresses and private data.
+
+I2P has its own domain name system (.i2p domains). But there is a serious problems with getting domain
+available to public without using hardcore tricks. .i2p zone has several central registars and single
+.i2p domain can conflict in resolving on different clients:
+- Different registars can register the same domain for different persons
+- To use Nth registar data, client must find its website and subscribe for its updates
+- Also every client has several local address books, where records might conflict with 
+registars' provided data
+
+This makes .i2p zone not authoritative and opposed to user.
+
+.i2p has athoritative .b32.i2p zone, but those names are just long hash and also not user friendly.
+
+Problem 2: I2P needs an authoritative anonymous domain name system, which provides user-friendly domain names
+and their authoritative reolution into I2P destination anonymous addresses.
+
+3. The Resolution
+
+Summary:
+
+Problem 1: NameCoin needs an anonymous P2P Network
+Problem 2: I2P needs an authoritative anonymous domain name system, which provides user-friendly domain names
+and their authoritative reolution into I2P destination anonymous addresses.
+
+The resolution is to integrate NameCoin support into I2P Network.
+
+4. NameCoin-I2P-Resolver project
+
+This project provides example java classes to support .bit zone resolution into i2p destination hashes in I2P software.
+
+All classes are in src/
+Example patches are in patches/
+
+
+==== Build instructions
+
+1. Download and extract i2p sources
+
+# wget http://mirror.i2p2.de/i2psource_0.8.12.tar.bz2
+# tar xjf i2psource_0.8.12.tar.bz2 
+
+2. Git
+
+3. Copy the src/org and src/net to i2pmodified/core/java/src
+
+# cp -R NameCoin-I2P-Resolver/src/net i2p-0.8.12/core/java/src
+# cp -R NameCoin-I2P-Resolver/src/org i2p-0.8.12/core/java/src
+
+4. Apply patches
+
+# cd i2p-0.8.12
+# patch -p1 < ../NameCoin-I2P-Resolver/patches/I2PAppContext.java.patch
+# patch -p1 < ../NameCoin-I2P-Resolver/patches/I2PTunnelHTTPClient.java.patch
+
+5. Build
+
+# ant distclean
+# ant updater
+
+You should get i2pudate.zip file. Stop your i2p router, extract contents of i2pupdate.zip into i2p installation dir replacing original files.
+
+6. Installing namecoind
+
+Get latest namecoind for your system at http://dot-bit.org/Main_Page
+
+Create directory ~/.namecoin
+Create config file ~/.namecoin/bitcoin.conf with example config:
+
+rpcuser=namecoin
+rpcpassword=nmpassword
+rpcport=8335
+gen=0
+daemon=1
+server=1
+rpcallowip=127.0.0.1
+rpcallowip=192.168.1.33
+
+Note: rpcallowip should contain IP address of your I2P router to accept queries.
+Note: rpcuser, rpcpassword, rpcport will be used in i2prouter namecoin.config
+
+Run namecoind:
+# ./namecoind -daemon
+
+Wait until namecoind syncronized with network (first-run only step). It can take from 10s minutes to few hours.
+To determine client is in sync, run
+
+# ./namecoind getinfo
+
+Look into "blocks" variable. It is increasing from zero at first run and should reach the latest block id at http://explorer.dot-bit.org/
+
+Once it have reached latest network block id, its database will be up to date and you may start using it.
+
+6. Configure I2P router <-> namecoind communication
+
+Create a file ~/.i2p/namecoin.config with example contents:
+
+enabled=1
+host=127.0.0.1
+port=8335
+user=btc
+password=Aks93kl1
+
+Where
+    host - is a namecoind IP
+    port,user,password are from ~/.namecoin/bitcoinf.conf (configured in previous step)
+
+7. Finally
+
+Start your i2p router, configure your web browser to use router proxy at router ip and port 4444
+
+Browse example .bit domain configured for i2p:
+
+http://i2psupport.bit
+
+
+References:
+http://dot-bit.org/Main_Page - NameCoin decentralized domain system and cryptocurrency
+http://dot-bit.org/HowToRegisterAndConfigureBitDomains - Registering NameCoin Domains
+http://dot-bit.org/Domain_names - Using NameCoin domains
+http://www.i2p2.de/ - I2P: Internet Invisible Project, anonymous network
+https://bitcointalk.org/ - General community of all Bitcoin-based projects
+https://bitcointalk.org/index.php?topic=60879.0 - Original thread of integration purposes NameCoin into I2P
+https://bitcointalk.org/index.php?topic=61486.msg719109#msg719109 - Russian version
+http://i2psupport.org/ - This project home page
+http://i2psupport.bit/ - Mirror in anonymous .bit zone (need patched i2p router proxy to enter)

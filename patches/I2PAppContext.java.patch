@@ -1,0 +1,42 @@
+--- i2p-0.8.12/core/java/src/net/i2p/I2PAppContext.java	2012-01-06 03:29:49.000000000 +0200
++++ i2pmodified/core/java/src/net/i2p/I2PAppContext.java	2012-01-28 00:49:18.755686017 +0200
+@@ -8,6 +8,7 @@
+ import java.util.Set;
+ 
+ import net.i2p.client.naming.NamingService;
++import net.i2p.client.naming.namecoin.I2PNMCResolver;
+ import net.i2p.crypto.AESEngine;
+ import net.i2p.crypto.CryptixAESEngine;
+ import net.i2p.crypto.DSAEngine;
+@@ -73,6 +74,7 @@
+     private StatManager _statManager;
+     private SessionKeyManager _sessionKeyManager;
+     private NamingService _namingService;
++    private I2PNMCResolver _nmcresolver;
+     private ElGamalEngine _elGamalEngine;
+     private ElGamalAESEngine _elGamalAESEngine;
+     private AESEngine _AESEngine;
+@@ -90,6 +92,7 @@
+     private volatile boolean _statManagerInitialized;
+     private volatile boolean _sessionKeyManagerInitialized;
+     private volatile boolean _namingServiceInitialized;
++    private volatile boolean _nmcresolverInitialized;
+     private volatile boolean _elGamalEngineInitialized;
+     private volatile boolean _elGamalAESEngineInitialized;
+     private volatile boolean _AESEngineInitialized;
+@@ -583,6 +586,15 @@
+     }
+     
+     /**
++     * Pull up the ncm resolver service used in this context.
++     */
++    public I2PNMCResolver nmcresolverService() {
++        if (!_nmcresolverInitialized)
++            _nmcresolver=new I2PNMCResolver(this);
++        return _nmcresolver;
++    }
++    
++    /**
+      * Pull up the naming service used in this context.  The naming service itself
+      * works by querying the context's properties, so those props should be 
+      * specified to customize the naming service exposed.

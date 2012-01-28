@@ -1,0 +1,29 @@
+--- i2p-0.8.12/apps/i2ptunnel/java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java	2012-01-06 03:29:42.000000000 +0200
++++ i2pmodified/apps/i2ptunnel/java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java	2012-01-28 02:06:49.000000000 +0200
+@@ -22,6 +22,9 @@
+ import java.util.Properties;
+ import java.util.StringTokenizer;
+ import java.util.concurrent.ConcurrentHashMap;
++import net.i2p.client.naming.namecoin.I2PNMCResolver;
++import net.namecoin.NameCoinI2PResolver.NameCoinDNSClientException;
++
+ 
+ import net.i2p.I2PAppContext;
+ import net.i2p.I2PException;
+@@ -428,6 +431,16 @@
+                     // in our addressbook (all naming is local),
+                     // and it is removed from the request line.
+ 
++                    // NMC patch
++                    if (host.toLowerCase().endsWith(".bit")) {
++                        I2PNMCResolver nmc = this._context.nmcresolverService();
++                        try {
++                            String nmcresolve = nmc.resolve(host);
++                            if (nmcresolve != null) host = nmcresolve;
++                        } catch (NameCoinDNSClientException e) {
++                            //
++                        }
++                    }
+                     if (host.length() >= 516 && host.indexOf(".") < 0) {
+                         // http://b64key/bar/baz.html
+                         destination = host;
