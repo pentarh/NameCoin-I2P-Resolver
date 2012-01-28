@@ -94,7 +94,9 @@ Example patches are in patches/
 # wget http://mirror.i2p2.de/i2psource_0.8.12.tar.bz2
 # tar xjf i2psource_0.8.12.tar.bz2 
 
-2. Git
+2. Dowload Git Patches
+
+# git clone http://github.com/pentarh/NameCoin-I2P-Resolver.git
 
 3. Copy the src/org and src/net to i2pmodified/core/java/src
 
