@@ -4,8 +4,8 @@ Author:		Pentarh Udi <pentarh@gmail.com>
 URL:		http://i2psupport.org/
 
 NOTE: This is not the end way of NameCoin integration, but a kickstart
-NOTE: This is the proof-of-concept way to get fully anonimized internet services work with authoritative user-friendly name resolution
-NOTE: It is still complex to set it up and beta version a lot of work is in a track
+NOTE: This is the proof-of-concept way to get fully anonymized internet services work with authoritative user-friendly name resolution
+NOTE: It is still complex to set it up. It is beta and a lot of work is in a track
 
 1. Background
 
@@ -26,7 +26,7 @@ To register a name, you must own some namecoins (NMC, the internal cryptocurrenc
 
 1.2 I2P
 
-I2P is an anonymizing network, offering a simple layer that identity-sensitive 
+I2P is an anonymouse network, offering a simple layer that identity-sensitive 
 applications can use to securely communicate. All data is wrapped with several 
 layers of encryption, and the network is both distributed and dynamic, with no
 trusted parties.
@@ -35,7 +35,7 @@ Many applications are available that interface with I2P, including mail, peer-pe
 
 2. The Problem
 
-NameCoin was designed as decentralized authoritative name resolution network with all features of record
+NameCoin was designed as decentralized authoritative name resolution network with  record
 digital signatures. So the NameCoin domains are authoritative and only owner can change his domain attributes.
 NameCoin has no any central authority and works on P2P basis, being anonymous authoritative P2P domain provider. 
 Owning NameCoin domain will not disclose any your private data to public if you do not want it.
@@ -46,7 +46,7 @@ When you configure your domain to resolve to regular IP4/IP6 addresses or delega
 a regular nameservers, you can expirence privacy data leak. Your server is not anonymous
 in this case and can be shut down with 3rd party companies.
 
-So there is no sense in anonimous domain when you use public IP protocol which is not anonimous 
+So there is no sense in anonymous domain when you use public IP protocol which is not anonymous 
 by default.
 
 Problem 1: NameCoin needs an anonymous P2P Network
@@ -64,10 +64,10 @@ registars' provided data
 
 This makes .i2p zone not authoritative and opposed to user.
 
-.i2p has athoritative .b32.i2p zone, but those names are just long hash and also not user friendly.
+.i2p has athoritative .b32.i2p zone, but those names are just long hashes and also not user friendly.
 
 Problem 2: I2P needs an authoritative anonymous domain name system, which provides user-friendly domain names
-and their authoritative reolution into I2P destination anonymous addresses.
+and their authoritative resolution into I2P destination anonymous addresses.
 
 3. The Resolution
 
@@ -75,7 +75,7 @@ Summary:
 
 Problem 1: NameCoin needs an anonymous P2P Network
 Problem 2: I2P needs an authoritative anonymous domain name system, which provides user-friendly domain names
-and their authoritative reolution into I2P destination anonymous addresses.
+and their authoritative resolution into I2P destination anonymous addresses.
 
 The resolution is to integrate NameCoin support into I2P Network.
 
