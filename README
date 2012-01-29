@@ -2,6 +2,8 @@ This code is an example how to resolve anonymouse authoritative Namecoin .bit do
 
 Author:		Pentarh Udi <pentarh@gmail.com>
 URL:		http://i2psupport.org/
+License:	GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+Using libs:	org.json https://github.com/douglascrockford/JSON-java
 
 NOTE: This is not the end way of NameCoin integration, but a kickstart
 NOTE: This is the proof-of-concept way to get fully anonymized internet services work with authoritative user-friendly name resolution
